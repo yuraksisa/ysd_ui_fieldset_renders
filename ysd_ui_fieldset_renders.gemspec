@@ -9,5 +9,5 @@ Gem::Specification.new do |s|
   s.summary = "Yurak Sisa UI fieldset renders"
   
   s.add_runtime_dependency "ysd_md_fieldset"
-  
+  s.add_runtime_dependency "ysd_core_themes" 
 end
