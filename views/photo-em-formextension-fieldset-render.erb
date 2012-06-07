@@ -1,0 +1,121 @@
+        <div id="choose_photo" style="display:none; background: white;">
+        
+           <%= upload_photo :locals => { :photo_album => photo_album , 
+                                         :photo_width =>  width , 
+                                         :photo_height =>  height ,             
+                                         :accept => 'image/jpeg,image/gif,image/png,image/jpeg', :max_size =>   1000000 } %>
+        </div>
+
+        <script type="text/javascript">
+
+          contentPhoto = {
+
+            init : function() {
+            
+              var cp = this;
+            
+              $('.new-entity-button').bind('click',    
+               function(event) { 
+            	 cp.onEdit(); 
+               }
+              );
+      
+              $('.edit-entity-button').bind('click',   
+               function(event) { 
+         	     cp.onNew();
+               }
+              );
+	
+            },
+
+            onEdit : function() { /* On Edit the content */
+            
+              this.configureEvents();
+            
+            },
+            
+            onNew : function() { /* On new content */
+              
+              this.configureEvents();
+            
+            },
+            
+            configureEvents : function() { /* Configure the events */
+            
+              /* Photo Fieldset */
+              $('#change_photo_link').bind('click',
+                function(event) {
+                  contentPhoto.choosePhoto();	
+                });
+            
+            },
+   
+  	        choosePhoto : function() { /* Choose the photo (push the button) */
+  	
+  	           if (typeof uploaderModel != "undefined") {
+  	  	 
+                 var photoAlbum = '';
+                 var photoId = '';
+ 
+  	  	         if (document.forms['element']['photo_path']) { 
+  	  	           /*var reg_exp = /album\\/(\\w+)\\/photo\\/(\\w+)/;*/
+  	  	           var reg_exp = new RegExp("album\\/(\\w+)\\/photo\\/(\\w+)");
+                   var photo_info = document.forms['element']['photo_path'].value.match(reg_exp);          
+                   if (photo_info) {
+                     photoAlbum = photo_info[1];
+                     photoId = photo_info[2];  	  	
+                   }
+  	  	         }
+  	  	
+  	  	         uploaderModel.photoId = photoId;
+  	  	         uploaderModel.photoAlbum = photoAlbum;
+  	  	         if (document.forms['element']['key']) {
+  	               uploaderModel.photoName = document.forms['element']['key'].value;
+  	  	         }
+  	  	         
+  	             uploaderModel.onPhotoUploaded = function() {
+  	      
+  	               var the_photo = 'album/' + uploaderModel.photo.album.name + '/photo/' + uploaderModel.photo.id;
+  	               document.forms['element']['photo_path'].setAttribute('value', the_photo);
+  	      
+  	               if (document.forms['element']['photo_url_tiny'] && uploaderModel.photo.thumbnails && uploaderModel.photo.thumbnails[0] && uploaderModel.photo.thumbnails[0].thumbnail_url) {
+  	                 document.forms['element']['photo_url_tiny'].setAttribute('value', uploaderModel.photo.thumbnails[0].thumbnail_url);
+  	               }
+  	      
+  	               if (document.forms['element']['photo_url_small'] && uploaderModel.photo.thumbnails && uploaderModel.photo.thumbnails[1] && uploaderModel.photo.thumbnails[1].thumbnail_url) {
+  	                 document.forms['element']['photo_url_small'].setAttribute('value', uploaderModel.photo.thumbnails[1].thumbnail_url);
+  	               }
+  	      
+  	               if (document.forms['element']['photo_url_medium'] && uploaderModel.photo.thumbnails && uploaderModel.photo.thumbnails[2] && uploaderModel.photo.thumbnails[2].thumbnail_url ) {
+  	                 document.forms['element']['photo_url_medium'].setAttribute('value', uploaderModel.photo.thumbnails[2].thumbnail_url);
+  	               }
+  	      
+  	               if (document.forms['element']['photo_url_full'] && uploaderModel.photo.image_url) {
+  	                 document.forms['element']['photo_url_full'].setAttribute('value', uploaderModel.photo.image_url);
+  	               }
+  	      
+  	               // The version is added to force the photo reload
+  	               if (document.forms['element']['element_photo_img'] &&  uploaderModel.photo.image_url) {
+                     document.forms['element']['element_photo_img'].setAttribute('src', uploaderModel.photo.image_url); 
+  	               }
+  	               
+  	               YSD.hideElement(document.getElementById('choose_photo'));
+  	                     
+  	             } // onPhotoUploaded
+  	           }  	
+  	           
+  	           if (typeof uploaderController != "undefined") {
+  	           	
+  	           	uploaderController.events.addEventListener('close', function(event) {
+  	           	  YSD.hideElement(document.getElementById('choose_photo'));	
+  	           	});
+  	           	
+  	           }
+  	           
+  	           YSD.showElement(document.getElementById('choose_photo'), true);	
+    	    } // choosePhoto
+          };
+          
+          contentPhoto.init();
+          
+          </script>
