@@ -1,9 +1,10 @@
         <div id="choose_photo" style="display:none; background: white;">
         
-           <%= upload_photo :locals => { :photo_album => photo_album , 
-                                         :photo_width =>  width , 
-                                         :photo_height =>  height ,             
-                                         :accept => 'image/jpeg,image/gif,image/png,image/jpeg', :max_size =>   1000000 } %>
+           <%= upload_photo :locals => { :photo_album  => photo_album , 
+                                         :photo_width  => photo_width , 
+                                         :photo_height => photo_height ,             
+                                         :accept       => photo_accept, 
+                                         :max_size     => photo_max_size } %>
         </div>
 
         <script type="text/javascript">
