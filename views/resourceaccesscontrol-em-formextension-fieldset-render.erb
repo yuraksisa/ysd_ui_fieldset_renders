@@ -26,7 +26,7 @@ ResourceAccessControlEntityHookPlugin = function() {
     var permissionsOwner = (entity && entity.permission_modifier_owner)?entity.permission_modifier_owner:0;
     var selectPermissionsOwner = new YsdForms.SelectSelector('permission_modifier_owner', permissionsDataSource, permissionsOwner);  	
 
-    var permissionsGroup = (entity && entity.permission_modifier_group)?entity.permission_group_owner:0;
+    var permissionsGroup = (entity && entity.permission_modifier_group)?entity.permission_modifier_group:0;
     var selectPermissionsGroup = new YsdForms.SelectSelector('permission_modifier_group', permissionsDataSource, permissionsGroup);  	
 
     var permissionsAll = (entity && entity.permission_modifier_all)?entity.permission_modifier_all:0;
