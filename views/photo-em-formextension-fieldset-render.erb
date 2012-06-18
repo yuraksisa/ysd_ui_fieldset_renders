@@ -9,49 +9,34 @@
 
         <script type="text/javascript">
 
-          contentPhoto = {
-
-            init : function() {
-            
-              var cp = this;
-            
-              $('.new-entity-button').bind('click',    
-               function(event) { 
-            	 cp.onEdit(); 
-               }
-              );
-      
-              $('.edit-entity-button').bind('click',   
-               function(event) { 
-         	     cp.onNew();
-               }
-              );
-	
-            },
-
-            onEdit : function() { /* On Edit the content */
+          PhotoPlugin = function() {
+          	
+            this.onEdit = function() { /* On Edit */
             
               this.configureEvents();
             
-            },
+            };
             
-            onNew : function() { /* On new content */
+            this.onNew = function() { /* On new */
               
               this.configureEvents();
             
-            },
+            };
             
-            configureEvents : function() { /* Configure the events */
+            /* -------------------------- */
             
-              /* Photo Fieldset */
+            this.configureEvents = function() { /* Configure the events */
+            
+              var self = this;
+            
               $('#change_photo_link').bind('click',
                 function(event) {
-                  contentPhoto.choosePhoto();	
+                  self.choosePhoto();	
                 });
             
-            },
+            };
    
-  	        choosePhoto : function() { /* Choose the photo (push the button) */
+  	        this.choosePhoto = function() { /* Choose the photo (push the button) */
   	
   	           if (typeof uploaderModel != "undefined") {
   	  	 
@@ -117,6 +102,13 @@
     	    } // choosePhoto
           };
           
-          contentPhoto.init();
+          
+          if (typeof YSD.entityManagement.complementHooks != 'undefined') {
+	
+            var photoPlugin = new PhotoPlugin();
+    
+            YSD.entityManagement.complementHooks.register(photoPlugin);	
+	
+          }          
           
           </script>
