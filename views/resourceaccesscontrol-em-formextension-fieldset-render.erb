@@ -20,7 +20,7 @@ ResourceAccessControlEntityHookPlugin = function() {
 
     var dataSource = new YsdForms.RemoteDataSource('/usergroups',{id:'group', description:'name'});
     var value = (entity&&entity.permission_group)?entity.permission_group:null; 
-    var selector = new YsdForms.SelectSelector('permission_group', 'permission_group', dataSource, value );
+    var selector = new YsdForms.SelectSelector('permission_group', dataSource, value );
 
     var permissionsData = [{id:0, description:'None'},
                            {id:2, description:'Read'}, 
