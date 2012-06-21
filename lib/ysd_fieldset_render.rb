@@ -27,13 +27,13 @@ module UIFieldSetRender
       template_name << "-#{resource_type}"
       template_name = template_name.join
       
-      #puts "template_name : #{template_name}"
+      puts "rendering template_name : #{template_name}"
       
       template_path = find_template(template_name)      
       template = Tilt.new(template_path)
       the_render = template.render(@app, options)                                  
       
-      #puts "render (#{template_name}) :  #{the_render}"
+      puts "#{template_name} encoding:  #{the_render.encoding}"
       
       the_render
      
@@ -53,7 +53,7 @@ module UIFieldSetRender
            template_path = path if File.exist?(path)
         end
          
-        puts "ui template path (#name) : #{template_path}"
+        puts "ui template path (#{name}) : #{template_path}"
         
         template_path
        

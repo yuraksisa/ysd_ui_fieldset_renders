@@ -10,7 +10,7 @@ ResourceAccessControlEntityHookPlugin = function() {
   };
   
   this.onNew = function() {
-  	$('#permission_owner').val('<%= user.username %>');
+  	$('#permission_owner').val('<%= user.username unless defined?(user) %>');
     this.configForm(null);	
   };  	
 	
