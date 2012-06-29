@@ -1,0 +1,11 @@
+     <div id="hobbies_template">
+        <% if @document.hobbies_i_love_to and @document.hobbies_i_love_to.strip.length > 0 %>
+          <div><span class="profile_literal"><%= t.profile.hobbies.i_love_to%></span> <%=@document.hobbies_i_love_to%></div>      
+        <% end %>
+        <% if @document.hobbies_i_like_to and @document.hobbies_i_like_to.strip.length > 0 %>
+          <div><span class="profile_literal"><%= t.profile.hobbies.i_like_to%></span> <%=@document.hobbies_i_like_to%></div>      
+        <% end %>
+        <% if @document.hobbies_i_dont_like_to and @document.hobbies_i_dont_like_to.strip.length > 0 %>
+          <div><span class="profile_literal"><%= t.profile.hobbies.i_dont_like_to%></span> <%=@document.hobbies_i_dont_like_to%></div>      
+        <% end %>
+     </div>

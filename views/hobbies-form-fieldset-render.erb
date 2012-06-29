@@ -1,0 +1,17 @@
+     <div id="hobbies_form">
+        <fieldset>
+          <legend><%= t.profile_form.hobbies.title %></legend>        
+          <div class="formrow">
+            <label for="hobbies_i_love_to" class="fieldtitle"><%= t.profile_form.hobbies.i_love_to %></label>
+            <input type="text" name="hobbies_i_love_to" id="hobbies_i_love_to" maxlength="80" class="fieldcontrol" <% if @document %> value="<%= @document.hobbies_i_love_to if @document.hobbies_i_love_to%>" <% end %> />
+          </div>        
+          <div class="formrow">
+            <label for="hobbies_i_like_to" class="fieldtitle"><%= t.profile_form.hobbies.i_like_to %></label>
+            <input type="text" name="hobbies_i_like_to" id="hobbies_i_like_to" maxlength="80" class="fieldcontrol" <% if @document %> value="<%= @document.hobbies_i_like_to if @document.hobbies_i_like_to%>" <% end %> />
+          </div>
+          <div class="formrow">
+            <label for="hobbies_i_dont_like_to" class="fieldtitle"><%= t.profile_form.hobbies.i_dont_like_to %></label>
+            <input type="text" name="hobbies_i_dont_like_to" id="hobbies_i_dont_like_to" maxlength="80" class="fieldcontrol" <% if @document %> value="<%= @document.hobbies_i_dont_like_to if @document.hobbies_i_dont_like_to%>" <% end %> />
+          </div>
+        </fieldset>
+     </div>                  

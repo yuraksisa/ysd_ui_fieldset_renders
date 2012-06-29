@@ -1,0 +1,8 @@
+     <div id="edutacion_and_employment_template">
+        <% if @document.education_and_employment_employment and @document.education_and_employment_employment.strip.length > 0 %>
+          <div><span class="profile_literal"><%= t.profile.education_and_employment.employment%></span> <%=@document.education_and_employment_employment%></div>      
+        <% end %>
+        <% if @document.education_and_employment_education and @document.education_and_employment_education.strip.length > 0 %>
+          <div><span class="profile_literal"><%= t.profile.education_and_employment.education%></span> <%=@document.education_and_employment_education%></div>      
+        <% end %>
+     </div>

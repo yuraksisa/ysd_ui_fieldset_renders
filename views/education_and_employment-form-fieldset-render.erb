@@ -1,0 +1,13 @@
+     <div id="education_and_employment_form">
+        <fieldset>
+          <legend><%= t.profile_form.education_and_employment.title %></legend>        
+          <div class="formrow">
+            <label for="education_and_employment_employment" class="fieldtitle"><%= t.profile_form.education_and_employment.employment %></label>
+            <input type="text" name="education_and_employment_employment" id="education_and_employment_employment" maxlength="80" class="fieldcontrol" <% if @document %> value="<%= @document.education_and_employment_employment if @document.education_and_employment_employment%>" <% end %> />
+          </div>        
+          <div class="formrow">
+            <label for="education_and_employment_education" class="fieldtitle"><%= t.profile_form.education_and_employment.education %></label>
+            <input type="text" name="education_and_employment_education" id="education_and_employment_education" maxlength="80" class="fieldcontrol" <% if @document %> value="<%= @document.education_and_employment_education if @document.education_and_employment_education%>" <% end %> />
+          </div>
+        </fieldset>
+     </div>
