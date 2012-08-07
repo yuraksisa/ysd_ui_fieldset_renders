@@ -1,0 +1,257 @@
+<form name="attachments" target="attachment_uploader" method="POST" enctype="multipart/form-data" action="/attachment" style="display:none">
+  <input type="file" name="file" id="file"/>
+  <input type="hidden" name="storage" id="storage"/>
+  <input type="hidden" name="folder" id="folder"/>
+</form>
+
+<iframe id="attachment_uploader" name="attachment_uploader" style="display:none">
+    Your system does not support iframes
+</iframe>
+
+<script type="text/javascript">
+
+  /* ----------------------------
+     Attachment Plugin
+     ---------------------------- */
+     
+  AttachmentPlugin = function() {
+  
+    this.onNew = function() {
+    
+      this.configForm(null);
+    	
+    }
+    
+    this.onEdit = function(entity) {
+	
+	  this.configForm(entity);
+	    	
+    }
+    
+    this.onRender = function(entity) {
+    
+      var attachments = entity?entity.attachments:[];
+      for (var idx=0; idx<attachments.length;idx++) {
+        attachments[idx].download_url = "<a target=\"_blank\" href=\"/attachment/" + attachments[idx].id + "\">" + attachments[idx].description + "</a>";
+      }
+    
+      var memoryDataSource = new YsdForms.MemoryDataSource(attachments, {id:'id', description:'download_url'});
+      
+      var selector = new YsdForms.ListViewer('attachment_template',
+                                             'content_attachment_view',
+                                              memoryDataSource);
+    	
+    	
+    }
+    
+    this.adaptFormData = function(data) { /* Adapt the form data -before of sending the form-*/
+      	
+      data.attachments = [];
+      
+      for (var idx=0; idx < this.selector.getData().length; idx++) {
+        data.attachments.push(this.selector.getData()[idx].id);
+      }
+    
+      return data;	
+    }
+    
+    this.configForm = function(entity) {
+      
+      var attachments = entity?entity.attachments:[];
+            
+      var memoryDataSource = new YsdForms.MemoryDataSource(attachments, {id:'id', description:'description'});
+      
+      this.selector = new YsdForms.ListManagement('attachment_form', 
+                                                  'content_attachment', 
+                                                  memoryDataSource);
+     
+      var attachment = new Attachment();
+      
+      this.selector.addListener('add_element_button_click', function(event) {
+      	attachment.uploadFile(); 
+      });
+      
+      var selector = this.selector;
+                                                                                                         	
+      attachment.addListener('file_uploaded',       
+        function(event) {
+           var file = event.data.file;
+           selector.addElement({id:file.id, description: file.description});
+        });
+
+    	
+    }
+  	
+  }
+  
+  if (typeof YSD.entityManagement.complementHooks != 'undefined') {
+	
+    var attachmentPlugin = new AttachmentPlugin();
+    YSD.entityManagement.complementHooks.register(attachmentPlugin);	
+	
+  }   
+
+
+  /************************
+   *
+   * Attachment
+   *
+   ************************/
+  Attachment = function() {
+  	
+  	this.model = new AttachmentModel();
+  	this.controller = new AttachmentController(this.model);
+  	this.view = new AttachmentView(this.model, this.controller);
+  	  	
+    this.addListener = function(type, listener) { /* addListener */
+      this.model.addListener(type, listener);	
+    }
+
+    this.removeListener = function(type, listener) { /* removeListener */
+      this.model.removeListener(type, listener);  	  
+    }
+    
+    this.uploadFile = function() {
+      this.controller.attachNewFileClick();
+    }
+  	
+  }
+
+  /* -------- The model ------------ */
+
+  AttachmentModel = function() {
+  	
+	this.events = new YSD.EventTarget();	
+  	this.state = 'initiate';
+
+    this.addListener = function(type, listener) { /* addListener */
+      this.events.addEventListener(type, listener);	
+    }
+
+    this.removeListener = function(type, listener) { /* removeListener */
+      this.events.removeEventListener(type, listener);  	  
+    }
+  	
+  	this.setController = function(controller) {
+  	  this.controller = controller;	
+  	}
+  	
+  	this.setView = function(view) {
+  	  this.view = view;	
+  	}
+  	
+  	this.changeState = function(action) { /* change state */
+  	  
+  	  switch (action) {
+  	  
+  	    case 'send_request':
+  	      this.state = 'uploading_file'
+  	      break;
+  	  	  	  	
+  	  	case 'file_uploaded_ok':
+  	  	  this.state = 'file_uploaded';
+  	  	  this.events.fireEvent({type:'file_uploaded', data: {file: this.file}});
+  	  	  break;
+  	  	  
+  	  	case 'file_uploaded_error':
+  	  	  this.state = 'error_uploading_file';
+  	  	  break;
+  	  }
+  	  
+  	  this.view.stateChanged(this.state);
+  		
+  	}
+  	
+  	this.uploadFile = function(file) { /* Upload the attachment */
+  	  
+  	  if (this.storage) {
+  	    document.forms['attachments']['storage'].setAttribute('value', this.storage);	
+  	  }
+  	  
+  	  if (this.folder) {
+  	  	document.forms['attachments']['folder'].setAttribute('value', this.folder);
+  	  }
+  	  
+  	  this.changeState('send_request');
+  	  
+  	  document.forms['attachments'].submit(); // Submits the form to upload the file
+  	}
+  	
+  }
+  
+  AttachmentController = function(model) {
+  	
+  	this.model = model;
+  	
+  	this.setView = function(view) {
+  	  this.view = view;	
+  	}
+  	  	
+  	this.attachNewFileClick = function() {
+  	 	
+  	  var result = $('#file').click();
+  	  	
+  	}
+  	
+  	this.fileSelected = function() {
+  	
+  	  this.model.uploadFile();
+  		
+  	}
+  	  	
+  }
+  
+  AttachmentView = function(model, controller) {
+    
+    this.model = model;
+    this.controller = controller;
+    this.showingFileSelect = false;
+    
+    this.model.setView(this);
+    this.controller.setView(this);
+    
+    this.configEvents = function() {
+      
+      var self = this;
+      var controller = this.controller;
+      var model = this.model;
+     		
+      $('.attach-file').bind('click', function(event) {
+        controller.attachNewFileClick();	
+      });	
+    
+      $('#file').bind('change', function(event) {
+  	  	if ($('#file').val() != '') {
+  	  	  controller.fileSelected();
+  	  	}
+      });
+         
+      $('#attachment_uploader').bind('load', function(event){
+      	      	
+        try 
+        {
+          if (model.state == 'uploading_file') { // Manages the event only when uploading the image
+            model.file = JSON.parse(frames['attachment_uploader'].document.body.innerHTML);
+         	model.changeState('file_uploaded_ok');
+          }                  	     
+        }
+        catch (e)
+        { 
+          model.changeState('file_uploaded_error');
+        }      	
+      	
+      });
+      
+    }
+    
+    this.stateChanged = function(event) { /* State changed */
+    	
+    }
+    
+    this.configEvents();
+      	
+  }
+
+
+
+</script>
