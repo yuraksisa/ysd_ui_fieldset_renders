@@ -26,15 +26,11 @@ module UIFieldSetRender
       template_name << "-#{subsystem}" if subsystem and subsystem.to_s.strip.length > 0       
       template_name << "-#{resource_type}"
       template_name = template_name.join
-      
-      puts "rendering template_name : #{template_name}"
-      
+            
       template_path = find_template(template_name)      
       template = Tilt.new(template_path)
       the_render = template.render(@app, options)                                  
-      
-      puts "#{template_name} encoding:  #{the_render.encoding}"
-      
+            
       the_render
      
      end
@@ -52,9 +48,7 @@ module UIFieldSetRender
            path = File.expand_path(File.join(File.dirname(__FILE__), '..', 'views', "#{name}-fieldset-render.erb"))                                 
            template_path = path if File.exist?(path)
         end
-         
-        puts "ui template path (#{name}) : #{template_path}"
-        
+                
         template_path
        
     end #find_template
