@@ -18,3 +18,4 @@ YSD_FIELDSET_RENDERS
 
 <p>To create a render you can create up to 3 files in the views folder</p>
 
+<h2>UIFieldSetRender::FieldSetRender</h2>
